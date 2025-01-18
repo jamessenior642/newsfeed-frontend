@@ -1,6 +1,6 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AppNavbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Summarize from "./pages/Summarize";
 import Profile from "./pages/Profile";
@@ -8,7 +8,7 @@ import SummaryView from "./pages/SummaryView";
 
 const App: React.FC = () => (
   <Router>
-    <Navbar />
+    <AppNavbar />
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/summarize" element={<Summarize />} />

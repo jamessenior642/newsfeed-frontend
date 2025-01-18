@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { Container, Form, Button } from "react-bootstrap";
 
-const Summarize = () => {
+const Summarize: React.FC = () => {
   const [article, setArticle] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -9,22 +10,25 @@ const Summarize = () => {
   };
 
   return (
-    <div className="container">
-      <h1>Summarize an Article</h1>
-      <form onSubmit={handleSubmit}>
-        <textarea
-          className="form-control"
-          rows={10}
-          value={article}
-          onChange={(e) => setArticle(e.target.value)}
-          placeholder="Paste your article here..."
-        />
-        <button className="btn btn-primary mt-3" type="submit">
+    <Container>
+      <h1 className="my-4">Summarize an Article</h1>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group controlId="articleInput">
+          <Form.Label>Paste your article</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={10}
+            value={article}
+            onChange={(e) => setArticle(e.target.value)}
+          />
+        </Form.Group>
+        <Button variant="primary" type="submit" className="mt-3">
           Generate Summary
-        </button>
-      </form>
-    </div>
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
 export default Summarize;
+
