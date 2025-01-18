@@ -13,7 +13,7 @@ const App: React.FC = () => (
       <Route path="/" element={<Home />} />
       <Route path="/summarize" element={<Summarize />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/summary/:id" element={<SummaryView summary="Example summary" />} />
+      <Route path="/summary/:id" element={<SummaryView/>} />
     </Routes>
   </Router>
 );
