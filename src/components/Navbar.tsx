@@ -14,7 +14,7 @@ const AppNavbar: React.FC = () => {
           <Nav className="ms-auto">
             {isLoggedIn ? (
               <>
-                <Nav.Link href="/profile">{user?.name || "Profile"}</Nav.Link>
+                <Nav.Link href={`/profile/${user?._id}`}>Profile</Nav.Link>
                 <Nav.Link onClick={logout}>Logout</Nav.Link>
                 <Nav.Link href="/summarize">
                   <Button size="sm">Summarize</Button>

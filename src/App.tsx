@@ -14,7 +14,7 @@ const App: React.FC = () => (
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/summarize" element={<Summarize />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:userId" element={<Profile />} />
         <Route path="/summary/:id" element={<SummaryView/>} />
       </Routes>
     </Router>

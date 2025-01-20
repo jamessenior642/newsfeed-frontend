@@ -8,6 +8,7 @@ interface Article {
   title: string;
   content: string;
   author: string;
+  userId: string;
   createdAt: string;
 }
 
@@ -60,8 +61,14 @@ const Home: React.FC = () => {
                   {article.title}
                 </Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">
-                  By {article.author || "Anonymous"} on{" "}
-                  {new Date(article.createdAt).toLocaleDateString()}
+                  By{" "}
+                  {article.userId ? 
+                  (<Link to={`/profile/${article.userId}`}>
+                    {article.author}
+                  </Link>) : "Anonymous"
+                  }
+                  {" "}
+                  on {new Date(article.createdAt).toLocaleDateString()}
                 </Card.Subtitle>
                 <Card.Text className="flex-grow-1" style={{ color: "#555" }}>
                   {article.content.length > 150
