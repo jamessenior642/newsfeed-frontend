@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button, Alert, Card } from "react-bootstrap";
 import { ArticlesService } from "../services/ArticlesService";
 
 const Summarize: React.FC = () => {
@@ -8,19 +8,36 @@ const Summarize: React.FC = () => {
   const [author, setAuthor] = useState<string>("Anonymous");
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [summary, setSummary] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSuccessMessage(null);
+    setErrorMessage(null);
+    setSummary(null);
+    setLoading(true);
+
     try {
-      const response = await ArticlesService.uploadArticle(title, content, author);
-      setSuccessMessage(`Article "${response.title}" uploaded successfully!`);
-      setErrorMessage(null);
+      // Get the summary from the AI service
+      const generatedSummary = await ArticlesService.getSummary(content);
+
+      // Upload the article along with the generated summary to the Node.js server
+      const savedArticle = await ArticlesService.uploadArticle(title, content, author, generatedSummary);
+
+      setSuccessMessage(`Article "${savedArticle.title}" uploaded successfully!`);
+
+      // Set the generated summary in the state to display it
+      setSummary(savedArticle.summary);
+
+      // Clear the form fields
       setTitle("");
       setContent("");
       setAuthor("Anonymous");
     } catch (error: any) {
-      setErrorMessage("Failed to upload the article. Please try again.");
-      setSuccessMessage(null);
+      setErrorMessage("Failed to upload the article or generate the summary. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,10 +75,18 @@ const Summarize: React.FC = () => {
             placeholder="Paste the article content here..."
           />
         </Form.Group>
-        <Button variant="primary" type="submit" className="mt-3">
-          Upload Article
+        <Button variant="primary" type="submit" className="mt-3" disabled={loading}>
+          {loading ? "Generating Summary..." : "Submit"}
         </Button>
       </Form>
+      {summary && (
+        <Card className="mt-4">
+          <Card.Body>
+            <Card.Title>Generated Summary</Card.Title>
+            <Card.Text>{summary}</Card.Text>
+          </Card.Body>
+        </Card>
+      )}
     </Container>
   );
 };
