@@ -57,7 +57,7 @@ const Home: React.FC = () => {
           <Col md={6} lg={4} className="mb-4" key={article._id}>
             <Card className="shadow-sm h-100">
               <Card.Body className="d-flex flex-column">
-                <Card.Title className="text-truncate" style={{ fontWeight: "bold" }}>
+                <Card.Title className="text-truncate" style={{ fontFamily: "Times New Roman", fontWeight: "bold" }}>
                   {article.title}
                 </Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Spinner, Alert, Card, Button } from "react-bootstrap";
+import { Container, Spinner, Alert, Button } from "react-bootstrap";
 import { ArticlesService } from "../services/ArticlesService";
 
 interface Article {
@@ -35,38 +35,54 @@ const SummaryView: React.FC = () => {
   }, [id]);
 
   return (
-    <Container>
-      {loading && <Spinner animation="border" />}
-      {error && <Alert variant="danger">{error}</Alert>}
+    <Container className="py-5">
+      {loading && (
+        <div className="text-center">
+          <Spinner animation="border" />
+        </div>
+      )}
+      {error && (
+        <Alert variant="danger" className="text-center">
+          {error}
+        </Alert>
+      )}
       {article && (
-        <Card className="my-4">
-          <Card.Body>
-            <Card.Title>{article.title}</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">
-              By {article.author || "Anonymous"} on{" "}
+        <div className="article-view">
+          <header className="mb-4">
+            <h1 className="article-title" style={{ fontFamily: "Times New Roman, serif" }}>{article.title}</h1>
+            <p className="article-meta text-muted">
+              By <strong>{article.author || "Anonymous"}</strong> |{" "}
               {new Date(article.createdAt).toLocaleDateString()}
-            </Card.Subtitle>
-
-            <Card.Text>
-              <strong>Summary:</strong> <br />
-              {article.summary || "No summary available."}
-            </Card.Text>
-
-            {showFullArticle && (
-              <Card.Text>
-                <strong>Full Article:</strong> <br />
+            </p>
+          </header>
+          <section className="article-summary mb-4">
+            <h4 className="mb-3" style={{ fontFamily: "Times New Roman, serif" }}>
+              Summary
+            </h4>
+            <p style={{ fontSize: "1.1rem", lineHeight: "1.8" }}>
+              {article.summary || "No summary available for this article."}
+            </p>
+          </section>
+          {showFullArticle && (
+            <section className="article-content mt-5">
+              <h4 className="mb-3" style={{ fontFamily: "Times New Roman, serif" }}>
+                Full Article
+              </h4>
+              <p style={{ fontSize: "1.1rem", lineHeight: "1.8" }}>
                 {article.content}
-              </Card.Text>
-            )}
-
+              </p>
+            </section>
+          )}
+          <div className="text-center mt-4">
             <Button
-              variant="secondary"
+              variant="primary"
               onClick={() => setShowFullArticle(!showFullArticle)}
+              className="toggle-full-article-btn"
             >
-              {showFullArticle ? "Hide Full Article" : "Show Full Article"}
+              {showFullArticle ? "Hide Full Article" : "Read Full Article"}
             </Button>
-          </Card.Body>
-        </Card>
+          </div>
+        </div>
       )}
     </Container>
   );
