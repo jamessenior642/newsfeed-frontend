@@ -10,7 +10,7 @@ export const UserService = {
     return response.data;
   },
   fetchUserProfile: async (userId: string) => {
-    const response = await axios.get(`${API_BASE_URL}/users/${userId}`);
+    const response = await axios.get(`${API_BASE_URL}/api/users/${userId}`);
     return response.data;
   },
 };
