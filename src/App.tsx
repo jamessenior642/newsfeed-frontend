@@ -5,17 +5,20 @@ import Home from "./pages/Home";
 import Summarize from "./pages/Summarize";
 import Profile from "./pages/Profile";
 import SummaryView from "./pages/SummaryView";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const App: React.FC = () => (
-  <Router>
-    <AppNavbar />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/summarize" element={<Summarize />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/summary/:id" element={<SummaryView/>} />
-    </Routes>
-  </Router>
+  <AuthProvider>
+    <Router>
+      <AppNavbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/summarize" element={<Summarize />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/summary/:id" element={<SummaryView/>} />
+      </Routes>
+    </Router>
+  </AuthProvider>
 );
 
 export default App;
