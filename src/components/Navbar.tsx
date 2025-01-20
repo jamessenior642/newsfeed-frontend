@@ -1,16 +1,9 @@
 import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const AppNavbar: React.FC = () => {
   const { isLoggedIn, user, logout } = useAuth();
-  
-  // Function to handle login redirect
-  // const handleLoginRedirect = () => {
-  //   const currentUrl = encodeURIComponent(`http://localhost:3000${window.location.pathname}`); // URL encode the current URL
-  //   window.location.href = `http://localhost:3001/auth/google?returnTo=${currentUrl}`; // Redirect with encoded returnTo param
-  // };  
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
