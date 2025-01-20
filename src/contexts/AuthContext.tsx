@@ -29,7 +29,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    fetchAuthStatus(); // Call on component mount
+    fetchAuthStatus();
+    
+    // Add event listener for focus to check auth status
+    window.addEventListener('focus', fetchAuthStatus);
+    return () => window.removeEventListener('focus', fetchAuthStatus);
   }, []);
 
   const logout = async () => {
@@ -37,6 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
       setIsLoggedIn(false);
       setUser(null);
+      window.location.href = "http://localhost:3000/"; // Redirect after state update
     } catch (error) {
       console.error("Error logging out:", error);
     }
