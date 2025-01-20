@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Card, Spinner, Alert, Button } from "react-bootstrap";
+import { Container, Card, Spinner, Alert, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ArticlesService } from "../services/ArticlesService";
 
@@ -32,32 +32,56 @@ const Home: React.FC = () => {
   }, []);
 
   return (
-    <Container>
-      <h1 className="my-4">News Feed</h1>
-      {loading && <Spinner animation="border" />}
-      {error && <Alert variant="danger">{error}</Alert>}
-      {articles.map((article) => (
-        <Card key={article._id} className="mb-3">
-          <Card.Body>
-            <Card.Title>{article.title}</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">
-              By {article.author || "Anonymous"} on{" "}
-              {new Date(article.createdAt).toLocaleDateString()}
-            </Card.Subtitle>
-            <Card.Text>
-              {article.content.length > 200
-                ? `${article.content.substring(0, 200)}...`
-                : article.content}
-            </Card.Text>
-            <Link to={`/summary/${article._id}`}>
-              <Button variant="primary">Read More</Button>
-            </Link>
-          </Card.Body>
-        </Card>
-      ))}
+    <Container className="py-4">
+      <h1 className="text-center mb-4" style={{ fontWeight: "bold", color: "#333" }}>
+        News Feed
+      </h1>
+      {loading && (
+        <div className="text-center">
+          <Spinner animation="border" />
+        </div>
+      )}
+      {error && (
+        <Alert variant="danger" className="text-center">
+          {error}
+        </Alert>
+      )}
+      {!loading && !error && articles.length === 0 && (
+        <Alert variant="info" className="text-center">
+          No articles available. Check back later!
+        </Alert>
+      )}
+      <Row>
+        {articles.map((article) => (
+          <Col md={6} lg={4} className="mb-4" key={article._id}>
+            <Card className="shadow-sm h-100">
+              <Card.Body className="d-flex flex-column">
+                <Card.Title className="text-truncate" style={{ fontWeight: "bold" }}>
+                  {article.title}
+                </Card.Title>
+                <Card.Subtitle className="mb-2 text-muted">
+                  By {article.author || "Anonymous"} on{" "}
+                  {new Date(article.createdAt).toLocaleDateString()}
+                </Card.Subtitle>
+                <Card.Text className="flex-grow-1" style={{ color: "#555" }}>
+                  {article.content.length > 150
+                    ? `${article.content.substring(0, 150)}...`
+                    : article.content}
+                </Card.Text>
+                <Link to={`/summary/${article._id}`} className="mt-auto">
+                  <Button variant="primary" className="w-100">
+                    Read More
+                  </Button>
+                </Link>
+              </Card.Body>
+            </Card>
+          </Col>
+        ))}
+      </Row>
     </Container>
   );
 };
 
 export default Home;
+
 
