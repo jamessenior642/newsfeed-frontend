@@ -23,6 +23,7 @@ const AppNavbar: React.FC = () => {
               <>
                 <Nav.Link href="/profile">{user?.name || "Profile"}</Nav.Link>
                 <Nav.Link onClick={logout}>Logout</Nav.Link>
+                <Nav.Link href="/summarize">Summarize</Nav.Link>
               </>
             ) : (
               <Nav.Link href="http://localhost:3001/auth/google">Login</Nav.Link>

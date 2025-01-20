@@ -19,15 +19,12 @@ const Summarize: React.FC = () => {
     setLoading(true);
 
     try {
-      // Get the summary from the AI service
-      const generatedSummary = await ArticlesService.getSummary(content);
-
-      // Upload the article along with the generated summary to the Node.js server
-      const savedArticle = await ArticlesService.uploadArticle(title, content, author, generatedSummary);
+      // Upload the article to the backend, which will generate the summary
+      const savedArticle = await ArticlesService.uploadArticle(title, content, author);
 
       setSuccessMessage(`Article "${savedArticle.title}" uploaded successfully!`);
 
-      // Set the generated summary in the state to display it
+      // Set the generated summary from the backend response
       setSummary(savedArticle.summary);
 
       // Clear the form fields
