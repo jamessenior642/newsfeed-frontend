@@ -33,7 +33,7 @@ const Home: React.FC = () => {
 
   return (
     <Container className="py-4">
-      <h1 className="text-center mb-4" style={{ fontWeight: "bold", color: "#333" }}>
+      <h1 className="text-center mb-4" style={{ fontFamily: 'Times New Roman', fontWeight: "bold", color: "#333" }}>
         News Feed
       </h1>
       {loading && (
