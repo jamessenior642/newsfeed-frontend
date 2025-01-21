@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 
 const AppNavbar: React.FC = () => {
   const { isLoggedIn, user, logout } = useAuth();
+  const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
 
   return (
     <Navbar className="border-bottom shadow-sm" variant="light" bg="white" expand="lg" sticky="top">
@@ -21,7 +22,7 @@ const AppNavbar: React.FC = () => {
                 </Nav.Link>
               </>
             ) : (
-              <Nav.Link href="http://localhost:3001/auth/google">Login</Nav.Link>
+              <Nav.Link href={`${BACKEND_URL}/auth/google`}>Login</Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>

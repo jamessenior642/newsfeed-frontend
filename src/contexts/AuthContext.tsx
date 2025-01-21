@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await axios.get(`${BACKEND_URL}/auth/logout`, { withCredentials: true });
       setIsLoggedIn(false);
       setUser(null);
-      window.location.href = "http://localhost:3000/"; // Redirect after state update
+      window.location.href = "/"; // Redirect after state update
     } catch (error) {
       console.error("Error logging out:", error);
     }
