@@ -17,17 +17,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchAuthStatus = async () => {
     try {
+      console.log("Checking auth status...");
       const response = await axios.get(`${BACKEND_URL}/auth/status`, {
-        withCredentials: true, // Ensure cookies are sent
+        withCredentials: true,
       });
-  
-      if (response.data.loggedIn) {
-        setIsLoggedIn(true);
-        setUser(response.data.user);
-      } else {
-        setIsLoggedIn(false);
-        setUser(null);
-      }
+      console.log("Auth status response:", response.data);
+      setIsLoggedIn(response.data.loggedIn);
+      setUser(response.data.loggedIn ? response.data.user : null);
     } catch (error) {
       console.error("Error checking auth status:", error);
       setIsLoggedIn(false);
