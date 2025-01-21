@@ -6,9 +6,9 @@ const AppNavbar: React.FC = () => {
   const { isLoggedIn, user, logout } = useAuth();
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
+    <Navbar className="border-bottom shadow-sm" variant="light" bg="white" expand="lg" sticky="top">
       <Container>
-        <Navbar.Brand href="/" style={{ fontFamily: 'Times New Roman', fontWeight: "bold" }}>News Summarizer</Navbar.Brand>
+        <Navbar.Brand href="/" style={{ fontFamily: 'Times New Roman', fontWeight: "bold", fontSize: "1.5rem" }}>NewsSummarizer</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="ms-auto">

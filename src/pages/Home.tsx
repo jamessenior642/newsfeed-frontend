@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Card, Spinner, Alert, Button, Row, Col } from "react-bootstrap";
+import { Container, Spinner, Alert, Row, Col, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { ArticlesService } from "../services/ArticlesService";
 
@@ -32,10 +32,15 @@ const Home: React.FC = () => {
     fetchData();
   }, []);
 
+  // Split articles into featured and other categories
+  const headlineArticle = articles[0]; // First article as the headline
+  const featuredArticles = articles.slice(1, 4); // Next three articles
+  const otherArticles = articles.slice(4); // Remaining articles
+
   return (
-    <Container className="py-4">
-      <h1 className="text-center mb-4" style={{ fontFamily: 'Times New Roman', fontWeight: "bold", color: "#333" }}>
-        News Feed
+    <Container className="py-5">
+      <h1 className="text-center mb-4" style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333" }}>
+        Recent News
       </h1>
       {loading && (
         <div className="text-center">
@@ -52,43 +57,124 @@ const Home: React.FC = () => {
           No articles available. Check back later!
         </Alert>
       )}
-      <Row>
-        {articles.map((article) => (
-          <Col md={6} lg={4} className="mb-4" key={article._id}>
-            <Card className="shadow-sm h-100">
-              <Card.Body className="d-flex flex-column">
-                <Card.Title className="text-truncate" style={{ fontFamily: "Times New Roman", fontWeight: "bold" }}>
-                  {article.title}
-                </Card.Title>
-                <Card.Subtitle className="mb-2 text-muted">
-                  By{" "}
-                  {article.userId ? 
-                  (<Link to={`/profile/${article.userId}`}>
-                    {article.author}
-                  </Link>) : "Anonymous"
-                  }
-                  {" "}
-                  on {new Date(article.createdAt).toLocaleDateString()}
-                </Card.Subtitle>
-                <Card.Text className="flex-grow-1" style={{ color: "#555" }}>
-                  {article.content.length > 150
-                    ? `${article.content.substring(0, 150)}...`
-                    : article.content}
-                </Card.Text>
-                <Link to={`/summary/${article._id}`} className="mt-auto">
-                  <Button variant="primary" className="w-100">
-                    Read More
-                  </Button>
-                </Link>
-              </Card.Body>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+
+      {!loading && !error && (
+        <>
+          {/* Headline Article */}
+          {headlineArticle && (
+            <div className="headline-article mb-5">
+              <Card className="shadow-sm">
+                <Card.Body>
+                  <Card.Title as="h2" style={{ fontFamily: "Times New Roman, serif", fontWeight: "bold" }}>
+                    {headlineArticle.title}
+                  </Card.Title>
+                  <Card.Subtitle className="text-muted mb-3">
+                    By{" "}
+                    {headlineArticle.userId ? (
+                      <Link to={`/profile/${headlineArticle.userId}`} style={{ textDecoration: "none" }}>
+                        {headlineArticle.author}
+                      </Link>
+                    ) : (
+                      "Anonymous"
+                    )}{" "}
+                    on {new Date(headlineArticle.createdAt).toLocaleDateString()}
+                  </Card.Subtitle>
+                  <Card.Text style={{ fontSize: "1.1rem", lineHeight: "1.8" }}>
+                    {headlineArticle.content.length > 300
+                      ? `${headlineArticle.content.substring(0, 300)}...`
+                      : headlineArticle.content}
+                  </Card.Text>
+                  <Link to={`/summary/${headlineArticle._id}`}>
+                    <span style={{ color: "#007bff", cursor: "pointer", fontWeight: "bold" }}>
+                      Read More
+                    </span>
+                  </Link>
+                </Card.Body>
+              </Card>
+            </div>
+          )}
+
+          {/* Featured Articles */}
+          <Row className="mb-5">
+            {featuredArticles.map((article) => (
+              <Col md={4} key={article._id} className="mb-4">
+                <Card className="shadow-sm h-100">
+                  <Card.Body>
+                    <Card.Title as="h5" style={{ fontFamily: "Times New Roman, serif", fontWeight: "bold" }}>
+                      {article.title}
+                    </Card.Title>
+                    <Card.Subtitle className="text-muted mb-2">
+                      By{" "}
+                      {article.userId ? (
+                        <Link to={`/profile/${article.userId}`} style={{ textDecoration: "none" }}>
+                          {article.author}
+                        </Link>
+                      ) : (
+                        "Anonymous"
+                      )}
+                    </Card.Subtitle>
+                    <Card.Text style={{ fontSize: "0.95rem", color: "#555" }}>
+                      {article.content.length > 200
+                        ? `${article.content.substring(0, 200)}...`
+                        : article.content}
+                    </Card.Text>
+                    <Link to={`/summary/${article._id}`}>
+                      <span style={{ color: "#007bff", cursor: "pointer", fontWeight: "bold" }}>
+                        Read More
+                      </span>
+                    </Link>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+
+          {/* Other Articles */}
+          <div className="other-articles">
+            <h3 className="mb-4" style={{ fontFamily: "Times New Roman", fontWeight: "bold", color: "#333" }}>
+              More Articles
+            </h3>
+            <Row>
+              {otherArticles.map((article) => (
+                <Col md={6} lg={4} key={article._id} className="mb-4">
+                  <Card className="shadow-sm h-100">
+                    <Card.Body>
+                      <Card.Title
+                        className="text-truncate"
+                        style={{ fontFamily: "Times New Roman, serif", fontWeight: "bold" }}
+                      >
+                        {article.title}
+                      </Card.Title>
+                      <Card.Subtitle className="text-muted mb-2">
+                        By{" "}
+                        {article.userId ? (
+                          <Link to={`/profile/${article.userId}`} style={{ textDecoration: "none" }}>
+                            {article.author}
+                          </Link>
+                        ) : (
+                          "Anonymous"
+                        )}
+                      </Card.Subtitle>
+                      <Card.Text style={{ fontSize: "0.9rem", color: "#555" }}>
+                        {article.content.length > 150
+                          ? `${article.content.substring(0, 150)}...`
+                          : article.content}
+                      </Card.Text>
+                      <Link to={`/summary/${article._id}`}>
+                        <span style={{ color: "#007bff", cursor: "pointer", fontWeight: "bold" }}>
+                          Read More
+                        </span>
+                      </Link>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </>
+      )}
     </Container>
   );
 };
 
 export default Home;
-
-
