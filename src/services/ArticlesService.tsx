@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL = process.env.BACKEND_URL || "http://localhost:3001";
 
 export const ArticlesService = {
   uploadArticle: async (title: string, content: string, author: string) => {
