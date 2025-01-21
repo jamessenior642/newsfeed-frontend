@@ -20,8 +20,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const response = await axios.get(`${BACKEND_URL}/auth/status`, {
         withCredentials: true, // Ensure cookies are sent
       });
-      setIsLoggedIn(response.data.loggedIn);
-      setUser(response.data.loggedIn ? response.data.user : null);
+  
+      if (response.data.loggedIn) {
+        setIsLoggedIn(true);
+        setUser(response.data.user);
+      } else {
+        setIsLoggedIn(false);
+        setUser(null);
+      }
     } catch (error) {
       console.error("Error checking auth status:", error);
       setIsLoggedIn(false);
@@ -30,11 +36,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
+    // Check auth status when the app loads
     fetchAuthStatus();
-    
-    // Add event listener for focus to check auth status
-    window.addEventListener('focus', fetchAuthStatus);
-    return () => window.removeEventListener('focus', fetchAuthStatus);
+  
+    // Check auth status on window focus (e.g., after OAuth redirect)
+    const handleFocus = () => fetchAuthStatus();
+    window.addEventListener("focus", handleFocus);
+  
+    return () => window.removeEventListener("focus", handleFocus);
   }, []);
 
   const logout = async () => {
