@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 const AppNavbar: React.FC = () => {
   const { isLoggedIn, user, logout } = useAuth();
@@ -15,9 +16,9 @@ const AppNavbar: React.FC = () => {
           <Nav className="ms-auto">
             {isLoggedIn ? (
               <>
-                <Nav.Link href={`/profile/${user?._id}`}>Profile</Nav.Link>
+                <Nav.Link as={Link} to={`/profile/${user?._id}`}>Profile</Nav.Link>
                 <Nav.Link onClick={logout}>Logout</Nav.Link>
-                <Nav.Link href="/summarize">
+                <Nav.Link as={Link} to="/summarize">
                   <Button size="sm">Summarize</Button>
                 </Nav.Link>
               </>
