@@ -1,7 +1,9 @@
+// Profile.tsx
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Container, Card, ListGroup, Alert, Button } from "react-bootstrap";
 import { UserService } from "../services/UserService";
+import { ArticlesService } from "../services/ArticlesService";  // <-- Import here
 import { useAuth } from "../contexts/AuthContext";
 
 interface Article {
@@ -18,20 +20,20 @@ interface User {
 }
 
 const Profile: React.FC = () => {
-  const { userId } = useParams<{ userId: string }>(); // Get userId from the URL
-  const { user: loggedInUser } = useAuth(); // Get the logged-in user
+  const { userId } = useParams<{ userId: string }>();
+  const { user: loggedInUser } = useAuth();
   const [articles, setArticles] = useState<Article[]>([]);
   const [profileUser, setProfileUser] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const isOwnProfile = loggedInUser?._id === userId; // Check if viewing own profile
+  const isOwnProfile = loggedInUser?._id === userId;
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
         const [userProfile, userArticles] = await Promise.all([
-          UserService.fetchUserProfile(userId!), // Fetch user info
-          UserService.fetchUserArticles(userId!), // Fetch user articles
+          UserService.fetchUserProfile(userId!),
+          UserService.fetchUserArticles(userId!),
         ]);
 
         setProfileUser(userProfile);
@@ -44,6 +46,20 @@ const Profile: React.FC = () => {
 
     if (userId) fetchProfileData();
   }, [userId]);
+
+  // DELETE handler
+  const handleDelete = async (articleId: string) => {
+    try {
+      // Call the service to delete the article
+      await ArticlesService.deleteArticle(articleId);
+
+      // Update local state so we remove the deleted article from the array
+      setArticles((prev) => prev.filter((a) => a._id !== articleId));
+    } catch (err: any) {
+      console.error("Error deleting article:", err);
+      setError("Failed to delete article. Please try again.");
+    }
+  };
 
   return (
     <Container>
@@ -65,13 +81,15 @@ const Profile: React.FC = () => {
             <ListGroup.Item key={article._id}>
               <h5>{article.title}</h5>
               <p>{article.summary}</p>
-              <small>Uploaded on: {new Date(article.createdAt).toLocaleDateString()}</small>
+              <small>
+                Uploaded on: {new Date(article.createdAt).toLocaleDateString()}
+              </small>
               {isOwnProfile && (
                 <Button
                   variant="danger"
                   size="sm"
                   className="mt-2"
-                  onClick={() => console.log("Delete article:", article._id)}
+                  onClick={() => handleDelete(article._id)}
                 >
                   Delete
                 </Button>

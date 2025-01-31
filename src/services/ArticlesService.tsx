@@ -19,4 +19,8 @@ export const ArticlesService = {
     const response = await axios.get(`${API_BASE_URL}/api/articles/${id}`);
     return response.data;
   },
+  deleteArticle: async (articleId: string) => {
+    // Make sure we include credentials if your backend session is cookie-based
+    return axios.delete(`${API_BASE_URL}/api/articles/${articleId}`, { withCredentials: true });
+  },
 };
